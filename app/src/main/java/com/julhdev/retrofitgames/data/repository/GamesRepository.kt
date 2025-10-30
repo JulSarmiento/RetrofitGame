@@ -24,12 +24,17 @@ class GamesRepository @Inject constructor(
    */
   fun getGames(): Flow<Resource<List<GameList>>> = flow {
     emit(Resource.Loading())
-    try {
-      val response = gameApi.getGames()
-      val gamesList: List<GameList> = response?.results ?: emptyList()
-      emit(Resource.Success(gamesList))
-    } catch (e: Exception) {
-      emit(Resource.Error("Error al obtener la lista de juegos: ${e.message ?: "Error desconocido"} (${e::class.simpleName})"))
+    when (val result = safeApiCall { gameApi.getGames() }) {
+      is Resource.Success -> {
+        val gamesList: List<GameList> = result.data?.results ?: emptyList()
+        emit(Resource.Success(gamesList))
+      }
+      is Resource.Error -> {
+        emit(Resource.Error(result.message))
+      }
+      is Resource.Loading -> {
+        emit(Resource.Loading())
+      }
     }
   }
 }

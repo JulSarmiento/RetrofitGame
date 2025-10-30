@@ -6,7 +6,7 @@ package com.julhdev.retrofitgames.util.resource
  * - Success: Indica que la respuesta fue exitosa y contiene los datos.
  * - Loading: Indica que la respuesta está en proceso de carga.
  * - Failure: Indica que la respuesta falló y contiene un mensaje de error y opcionalmente datos parciales.
- * @usage Utilizar esta clase para manejar estados de respuestas en repositorios o view models.
+ * @usage Utilizar esta class para manejar estados de respuestas en repositorios o view models.
  */
 sealed class Resource<T> {
   class Success<T>(val data: T) : Resource<T>()

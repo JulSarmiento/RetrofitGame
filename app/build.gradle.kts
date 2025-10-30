@@ -27,15 +27,15 @@ android {
       isMinifyEnabled = false
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-      buildConfigField("String", "BASE_URL", "\"https://api.rawg.io/api/\"")
-      buildConfigField("String", "API_KEY", "\"?key=251d2200968a4597a0ece494bab81979\"")
-      buildConfigField("String", "ENDPOINT_GAMES", "\"games\"")
+      buildConfigField("String", "BASE_URL", "\"${project.findProperty("BASE_URL") as String}\"")
+      buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") as String}\"")
+      buildConfigField("String", "ENDPOINT_GAMES", "\"${project.findProperty("ENDPOINT_GAMES") as String}\"")
     }
 
     debug {
-      buildConfigField("String", "BASE_URL", "\"https://api.rawg.io/api/\"")
-      buildConfigField("String", "API_KEY", "\"?key=251d2200968a4597a0ece494bab81979\"")
-      buildConfigField("String", "ENDPOINT_GAMES", "\"games\"")
+      buildConfigField("String", "BASE_URL", "\"${project.findProperty("BASE_URL") as String}\"")
+      buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") as String}\"")
+      buildConfigField("String", "ENDPOINT_GAMES", "\"${project.findProperty("ENDPOINT_GAMES") as String}\"")
     }
   }
   compileOptions {

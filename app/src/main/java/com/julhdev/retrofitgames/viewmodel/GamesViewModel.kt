@@ -33,7 +33,6 @@ class GamesViewModel @Inject constructor(
 
   init {
     fetchGames()
-
   }
 
   /**

@@ -76,7 +76,7 @@ fun HomeViewContent(viewModel: GamesViewModel, pad: PaddingValues) {
           .padding(pad),
         contentAlignment = Alignment.Center
       ) {
-        Text(text = "Error: $errorMessage")
+        Text(text ="$errorMessage")
       }
     }
   }

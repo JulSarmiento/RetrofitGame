@@ -25,7 +25,7 @@ suspend fun <T> safeApiCall(
       Resource.Error("Error de red: ${e.localizedMessage}")
     } catch (e: HttpException) {
       val code = e.code()
-      val message = parseHttpError(e) ?: "Error HTTP $code"
+      val message = parseHttpError(e) ?: "Error HTTP $code "
       Resource.Error(message)
     }catch (e: Exception) {
       Resource.Error("Error inesperado: ${e.localizedMessage}")
