@@ -25,20 +25,41 @@ import javax.inject.Singleton
 object AppModule {
 
   /**
-   * Proporciona una instancia singleton de Retrofit configurada con la URL base y el convertidor Gson.
-   * @return Una instancia de Retrofit.
+   * Proporciona una instancia singleton de HttpLoggingInterceptor para registrar las solicitudes y respuestas HTTP.
+   * @return Una instancia de HttpLoggingInterceptor.
    */
   @Singleton
   @Provides
-  fun providesRetrofit(): Retrofit {
-    val logging = HttpLoggingInterceptor().apply {
+  fun providesLoggingInterceptor(): HttpLoggingInterceptor {
+    return HttpLoggingInterceptor().apply {
       level = HttpLoggingInterceptor.Level.BODY
     }
+  }
 
-    val client = OkHttpClient.Builder()
-      .addInterceptor(logging)
+  /**
+   * Proporciona una instancia singleton de OkHttpClient configurada con el interceptor de registro.
+   * @param loggingInterceptor El interceptor de registro HTTP.
+   * @return Una instancia de OkHttpClient.
+   */
+  @Singleton
+  @Provides
+  fun providesOkHttpClient(
+    loggingInterceptor: HttpLoggingInterceptor
+  ): OkHttpClient {
+    return OkHttpClient.Builder()
+      .addInterceptor(loggingInterceptor)
       .build()
+  }
 
+  /**
+   * Proporciona una instancia singleton de Retrofit configurada con la URL base y el convertidor Gson.
+   * @param client La instancia de OkHttpClient utilizada por Retrofit.
+   * @return Una instancia de Retrofit.
+   * @usage Utilizar esta instancia para crear servicios de API.
+   */
+  @Singleton
+  @Provides
+  fun providesRetrofit(client: OkHttpClient): Retrofit {
     return Retrofit.Builder()
       .baseUrl(BASE_URL)
       .client(client)
