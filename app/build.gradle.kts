@@ -26,6 +26,16 @@ android {
     release {
       isMinifyEnabled = false
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+      buildConfigField("String", "BASE_URL", "\"${project.findProperty("BASE_URL") as String}\"")
+      buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") as String}\"")
+      buildConfigField("String", "ENDPOINT_GAMES", "\"${project.findProperty("ENDPOINT_GAMES") as String}\"")
+    }
+
+    debug {
+      buildConfigField("String", "BASE_URL", "\"${project.findProperty("BASE_URL") as String}\"")
+      buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") as String}\"")
+      buildConfigField("String", "ENDPOINT_GAMES", "\"${project.findProperty("ENDPOINT_GAMES") as String}\"")
     }
   }
   compileOptions {
@@ -37,6 +47,7 @@ android {
   }
   buildFeatures {
     compose = true
+    buildConfig = true
   }
 }
 
@@ -49,6 +60,7 @@ dependencies {
   implementation(libs.androidx.compose.ui.graphics)
   implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.compose.material3)
+  implementation(libs.androidx.compose.material3.icons.extended)
 
   implementation(libs.hilt.android)
   ksp(libs.hilt.compiler)
@@ -56,6 +68,9 @@ dependencies {
   implementation(libs.androidx.navigation.compose)
 
   implementation(libs.retrofit)
+  implementation(libs.retrofit.converter.gson)
+
+  implementation(libs.logging.interceptor)
 
   implementation(libs.coil.compose)
 
