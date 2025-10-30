@@ -6,6 +6,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.julhdev.retrofitgames.viewmodel.GamesViewModel
 import com.julhdev.retrofitgames.views.DetailsView
 import com.julhdev.retrofitgames.views.HomeView
 
@@ -15,14 +16,14 @@ import com.julhdev.retrofitgames.views.HomeView
  * @usage Incluir este Composable en el punto de entrada de la aplicación para habilitar la navegación.
  */
 @Composable
-fun NavController(){
+fun NavController(viewModel: GamesViewModel){
   val navController = rememberNavController()
   NavHost(
     navController = navController,
     startDestination = Routes.HOME
   ) {
     composable(Routes.HOME) {
-      HomeView()
+      HomeView(viewModel)
     }
     composable(
       route = "${Routes.DETAILS}/{gameId}",
