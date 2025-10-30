@@ -60,17 +60,16 @@ object AppModule {
   @Singleton
   @Provides
   fun providesRetrofit(client: OkHttpClient): Retrofit {
-    return Retrofit.Builder()
-      .baseUrl(BASE_URL)
-      .client(client)
-      .addConverterFactory(GsonConverterFactory.create())
-      .build()
-
+    return Retrofit.Builder().apply {
+      baseUrl(BASE_URL)
+      client(client)
+      addConverterFactory(GsonConverterFactory.create())
+    }.build()
   }
 
   /**
    * Proporciona una instancia singleton de GameApi utilizando Retrofit.
-   * @param retrofit La instancia de Retrofit utilizada para crear GameApi.
+   * @param retrofit La instancia de Retrofit utilizada para crear GamesApi.
    * @return Una instancia de GameApi.
    */
   @Singleton

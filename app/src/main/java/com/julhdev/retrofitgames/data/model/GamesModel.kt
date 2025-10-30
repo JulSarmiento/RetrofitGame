@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Modelo de datos que representa la respuesta de la API de juegos.
  * @property count El número total de juegos disponibles.
- * @property result La lista de juegos obtenidos de la API.
+ * @property results La lista de juegos obtenidos de la API.
  * @usage Utilizar este modelo para mapear la respuesta de la API en el repositorio.
  */
 data class GamesModel(

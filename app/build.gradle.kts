@@ -26,6 +26,16 @@ android {
     release {
       isMinifyEnabled = false
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+      buildConfigField("String", "BASE_URL", "\"https://api.rawg.io/api/\"")
+      buildConfigField("String", "API_KEY", "\"?key=251d2200968a4597a0ece494bab81979\"")
+      buildConfigField("String", "ENDPOINT_GAMES", "\"games\"")
+    }
+
+    debug {
+      buildConfigField("String", "BASE_URL", "\"https://api.rawg.io/api/\"")
+      buildConfigField("String", "API_KEY", "\"?key=251d2200968a4597a0ece494bab81979\"")
+      buildConfigField("String", "ENDPOINT_GAMES", "\"games\"")
     }
   }
   compileOptions {
@@ -37,6 +47,7 @@ android {
   }
   buildFeatures {
     compose = true
+    buildConfig = true
   }
 }
 
@@ -49,7 +60,7 @@ dependencies {
   implementation(libs.androidx.compose.ui.graphics)
   implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.compose.material3)
-  implementation(libs.androidx.compose.material3.icon.extended)
+  implementation(libs.androidx.compose.material3.icons.extended)
 
   implementation(libs.hilt.android)
   ksp(libs.hilt.compiler)

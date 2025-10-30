@@ -11,7 +11,6 @@ import retrofit2.http.GET
  * @usage Inyecta esta interfaz en repositorios o view models para acceder a las operaciones de la API.
  */
 interface GamesApi {
-
   @GET(ENDPOINT_GAMES + API_KEY)
   suspend fun getGames(): GamesModel?
 }
