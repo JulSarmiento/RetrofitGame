@@ -1,7 +1,7 @@
 package com.julhdev.retrofitgames.util.resource
 
 /**
- * Classe generica para manejar los estados de una respuesta de red.
+ * Clase generica para manejar los estados de una respuesta de red.
  * @param T Tipo de dato que se maneja en la respuesta.
  * - Success: Indica que la respuesta fue exitosa y contiene los datos.
  * - Loading: Indica que la respuesta está en proceso de carga.

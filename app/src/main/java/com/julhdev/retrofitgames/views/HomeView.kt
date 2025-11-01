@@ -1,5 +1,6 @@
 package com.julhdev.retrofitgames.views
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,8 +15,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import com.julhdev.retrofitgames.components.CardGame
 import com.julhdev.retrofitgames.components.MainTopBar
 import com.julhdev.retrofitgames.data.model.GameList
+import com.julhdev.retrofitgames.ui.theme.FancyRed
 import com.julhdev.retrofitgames.util.resource.Resource
 import com.julhdev.retrofitgames.viewmodel.GamesViewModel
 
@@ -48,13 +54,18 @@ fun HomeViewContent(viewModel: GamesViewModel, pad: PaddingValues) {
       }
     }
     is Resource.Success -> {
-      val gamesList = (gamesResource as Resource.Success<List<GameList>>).data
-      if (gamesList.isNotEmpty()) {
+      val games = (gamesResource as Resource.Success<List<GameList>>).data
+      if (games.isNotEmpty()) {
         LazyColumn(
-          modifier = Modifier.padding(pad)
+          modifier = Modifier
+            .padding(pad)
+            .background(FancyRed)
         ) {
-          items(gamesList) { game ->
-            Text(text = game.name)
+          items(games) { game ->
+            CardGame(
+              game = game,
+              onClick = {/* TODO */}
+            )
           }
         }
       } else {
