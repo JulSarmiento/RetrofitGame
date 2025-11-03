@@ -23,14 +23,14 @@ fun NavController(viewModel: GamesViewModel){
     startDestination = Routes.HOME
   ) {
     composable(Routes.HOME) {
-      HomeView(viewModel)
+      HomeView(viewModel, navController)
     }
     composable(
       route = "${Routes.DETAILS}/{gameId}",
       arguments = listOf(navArgument("gameId") { type = NavType.IntType })
     ) {
       val id = it.arguments?.getInt("gameId") ?: -1
-      DetailsView()
+      DetailsView(viewModel, navController, id)
     }
   }
 }

@@ -1,16 +1,22 @@
 package com.julhdev.retrofitgames.viewmodel
 
-import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.util.copy
 import com.julhdev.retrofitgames.data.model.GameList
+import com.julhdev.retrofitgames.data.model.SingleGameModel
 import com.julhdev.retrofitgames.data.repository.GamesRepository
+import com.julhdev.retrofitgames.data.state.GameState
 import com.julhdev.retrofitgames.util.resource.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -31,6 +37,10 @@ class GamesViewModel @Inject constructor(
   private val _games = MutableStateFlow<Resource<List<GameList>>>(Resource.Loading())
   val games = _games.asStateFlow()
 
+  private val _state = MutableStateFlow<Resource<SingleGameModel>>(Resource.Loading())
+  val state = _state.asStateFlow()
+
+
   init {
     fetchGames()
   }
@@ -47,6 +57,16 @@ class GamesViewModel @Inject constructor(
       _games.value = Resource.Loading()
       repository.getGames().collect { result ->
         _games.value = result
+      }
+    }
+  }
+
+  fun getGameById(id: Int) {
+    viewModelScope.launch {
+      withContext(Dispatchers.IO) {
+        repository.getGameById(id).collect { result ->
+          _state.value = result
+        }
       }
     }
   }

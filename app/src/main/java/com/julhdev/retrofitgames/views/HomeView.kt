@@ -1,6 +1,5 @@
 package com.julhdev.retrofitgames.views
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.julhdev.retrofitgames.components.CardGame
 import com.julhdev.retrofitgames.components.MainTopBar
 import com.julhdev.retrofitgames.data.model.GameList
@@ -25,8 +22,14 @@ import com.julhdev.retrofitgames.ui.theme.FancyRed
 import com.julhdev.retrofitgames.util.resource.Resource
 import com.julhdev.retrofitgames.viewmodel.GamesViewModel
 
+/**
+ * Vista principal que muestra una lista de juegos.
+ * @param viewModel ViewModel que proporciona los datos de los juegos.
+ * @param navController Controlador de navegación para manejar la navegación entre vistas.
+ * @usage HomeView(viewModel = gamesViewModel, navController = navController)
+ */
 @Composable
-fun HomeView(viewModel: GamesViewModel) {
+fun HomeView(viewModel: GamesViewModel, navController: NavController) {
 
   Scaffold(
     topBar = {
@@ -35,11 +38,21 @@ fun HomeView(viewModel: GamesViewModel) {
       )
     }
   ) { innerPadding ->
-    HomeViewContent(viewModel, innerPadding)
+    HomeViewContent(viewModel, innerPadding, navController)
   }
 }
+
+
+/**
+ * Contenido de la vista principal que maneja la visualización de la lista de juegos.
+ * Muestra un indicador de carga, la lista de juegos o un mensaje de error según el estado de los datos.
+ * @param viewModel ViewModel que proporciona los datos de los juegos.
+ * @param pad PaddingValues para manejar el espaciado adecuado dentro del Scaffold.
+ * @param navController Controlador de navegación para manejar la navegación entre vistas.
+ * @usage HomeViewContent(viewModel = gamesViewModel, pad = innerPadding, navController = navController)
+ */
 @Composable
-fun HomeViewContent(viewModel: GamesViewModel, pad: PaddingValues) {
+fun HomeViewContent(viewModel: GamesViewModel, pad: PaddingValues, navController: NavController) {
   val gamesResource by viewModel.games.collectAsState()
 
   when (gamesResource) {
@@ -59,12 +72,13 @@ fun HomeViewContent(viewModel: GamesViewModel, pad: PaddingValues) {
         LazyColumn(
           modifier = Modifier
             .padding(pad)
-            .background(FancyRed)
         ) {
           items(games) { game ->
             CardGame(
               game = game,
-              onClick = {/* TODO */}
+              onClick = {
+                navController.navigate("details/${game.id}")
+              }
             )
           }
         }
