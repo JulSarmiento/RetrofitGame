@@ -1,15 +1,10 @@
 package com.julhdev.retrofitgames.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.copy
 import com.julhdev.retrofitgames.data.model.GameList
 import com.julhdev.retrofitgames.data.model.SingleGameModel
 import com.julhdev.retrofitgames.data.repository.GamesRepository
-import com.julhdev.retrofitgames.data.state.GameState
 import com.julhdev.retrofitgames.util.resource.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -61,6 +56,14 @@ class GamesViewModel @Inject constructor(
     }
   }
 
+  /**
+   * Recupera los detalles de un juego específico por su ID y actualiza el StateFlow correspondiente.
+   * Maneja los estados de éxito, error y carga utilizando la clase Resource.
+   * @param id El ID del juego a obtener.
+   * @see GamesRepository
+   * @see Resource
+   * @usage Llamar a getGameById(id) para iniciar la recuperación de los detalles del juego.
+   */
   fun getGameById(id: Int) {
     viewModelScope.launch {
       withContext(Dispatchers.IO) {
