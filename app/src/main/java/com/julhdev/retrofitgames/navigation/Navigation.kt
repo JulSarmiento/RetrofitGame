@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.julhdev.retrofitgames.viewmodel.GamesViewModel
 import com.julhdev.retrofitgames.views.DetailsView
 import com.julhdev.retrofitgames.views.HomeView
+import com.julhdev.retrofitgames.views.SearchGameView
 
 /**
  * Administra la navegación entre las diferentes vistas de la aplicación utilizando NavController y NavHost.
@@ -23,14 +24,17 @@ fun NavController(viewModel: GamesViewModel){
     startDestination = Routes.HOME
   ) {
     composable(Routes.HOME) {
-      HomeView(viewModel)
+      HomeView(viewModel, navController)
+    }
+    composable(Routes.SEARCH) {
+      SearchGameView(viewModel, navController)
     }
     composable(
       route = "${Routes.DETAILS}/{gameId}",
       arguments = listOf(navArgument("gameId") { type = NavType.IntType })
     ) {
       val id = it.arguments?.getInt("gameId") ?: -1
-      DetailsView()
+      DetailsView(viewModel, navController, id)
     }
   }
 }

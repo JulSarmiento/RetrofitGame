@@ -1,6 +1,8 @@
 package com.julhdev.retrofitgames.di
 
 import com.julhdev.retrofitgames.data.api.GamesApi
+import com.julhdev.retrofitgames.util.ApiKeyInterceptor
+import com.julhdev.retrofitgames.util.Constants.API_KEY
 import com.julhdev.retrofitgames.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -37,6 +39,14 @@ object AppModule {
   }
 
   /**
+   * Proporciona una instancia singleton de ApiKeyInterceptor para agregar la clave de API a las solicitudes HTTP.
+   * @return Una instancia de ApiKeyInterceptor.
+   */
+  @Singleton
+  @Provides
+  fun providesApiKeyInterceptor(): ApiKeyInterceptor = ApiKeyInterceptor(API_KEY)
+
+  /**
    * Proporciona una instancia singleton de OkHttpClient configurada con el interceptor de registro.
    * @param loggingInterceptor El interceptor de registro HTTP.
    * @return Una instancia de OkHttpClient.
@@ -44,9 +54,11 @@ object AppModule {
   @Singleton
   @Provides
   fun providesOkHttpClient(
-    loggingInterceptor: HttpLoggingInterceptor
+    loggingInterceptor: HttpLoggingInterceptor,
+    apiKeyInterceptor: ApiKeyInterceptor
   ): OkHttpClient {
     return OkHttpClient.Builder()
+      .addInterceptor(apiKeyInterceptor)
       .addInterceptor(loggingInterceptor)
       .build()
   }

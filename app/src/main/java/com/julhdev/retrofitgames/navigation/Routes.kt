@@ -9,4 +9,6 @@ package com.julhdev.retrofitgames.navigation
 object Routes {
   const val HOME = "home"
   const val DETAILS = "details"
+
+  const val SEARCH = "search"
 }

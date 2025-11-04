@@ -1,9 +1,9 @@
 package com.julhdev.retrofitgames.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.julhdev.retrofitgames.data.model.GameList
+import com.julhdev.retrofitgames.data.model.SingleGameModel
 import com.julhdev.retrofitgames.data.repository.GamesRepository
 import com.julhdev.retrofitgames.util.resource.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -31,8 +32,15 @@ class GamesViewModel @Inject constructor(
   private val _games = MutableStateFlow<Resource<List<GameList>>>(Resource.Loading())
   val games = _games.asStateFlow()
 
-  init {
-    fetchGames()
+  private val _state = MutableStateFlow<Resource<SingleGameModel>>(Resource.Loading())
+  val state = _state.asStateFlow()
+
+  /**
+   * Limpia el estado actual del StateFlow de detalles del juego estableciéndolo en Resource.Loading().
+   * @usage Llamar a cleanState() para restablecer el estado antes de una nueva operación de obtención de datos.
+   */
+  fun cleanState() {
+    _state.value = Resource.Loading()
   }
 
   /**
@@ -42,11 +50,29 @@ class GamesViewModel @Inject constructor(
    * @see Resource
    * @usage Llamar a fetchGames() para iniciar la recuperación de datos de juegos.
    */
-  private fun fetchGames() {
+   fun fetchGames(filter: String? = null) {
     viewModelScope.launch(Dispatchers.IO) {
       _games.value = Resource.Loading()
-      repository.getGames().collect { result ->
+      repository.getGames(filter).collect { result ->
         _games.value = result
+      }
+    }
+  }
+
+  /**
+   * Recupera los detalles de un juego específico por su ID y actualiza el StateFlow correspondiente.
+   * Maneja los estados de éxito, error y carga utilizando la clase Resource.
+   * @param id El ID del juego a obtener.
+   * @see GamesRepository
+   * @see Resource
+   * @usage Llamar a getGameById(id) para iniciar la recuperación de los detalles del juego.
+   */
+  fun getGameById(id: Int) {
+    viewModelScope.launch {
+      withContext(Dispatchers.IO) {
+        repository.getGameById(id).collect { result ->
+          _state.value = result
+        }
       }
     }
   }
