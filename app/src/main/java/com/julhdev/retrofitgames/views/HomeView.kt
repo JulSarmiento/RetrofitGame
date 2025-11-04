@@ -1,14 +1,17 @@
 package com.julhdev.retrofitgames.views
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.julhdev.retrofitgames.components.CardGame
 import com.julhdev.retrofitgames.components.ErrorState
@@ -30,7 +33,10 @@ fun HomeView(viewModel: GamesViewModel, navController: NavController) {
   Scaffold(
     topBar = {
       MainTopBar(
-        title = "Games List"
+        title = "Games List",
+        onActionClick = {
+          navController.navigate("search")
+        }
       )
     }
   ) { innerPadding ->
@@ -49,6 +55,11 @@ fun HomeView(viewModel: GamesViewModel, navController: NavController) {
  */
 @Composable
 fun HomeViewContent(viewModel: GamesViewModel, pad: PaddingValues, navController: NavController) {
+
+  LaunchedEffect(Unit) {
+    viewModel.fetchGames()
+  }
+
   val gamesResource by viewModel.games.collectAsState()
 
   when (gamesResource) {
@@ -61,6 +72,7 @@ fun HomeViewContent(viewModel: GamesViewModel, pad: PaddingValues, navController
         LazyColumn(
           modifier = Modifier
             .padding(pad)
+            .background(Color.Black)
         ) {
           items(games) { game ->
             CardGame(

@@ -23,9 +23,9 @@ class GamesRepository @Inject constructor(
    * Obtiene la lista de juegos desde la API.
    * @return Un objeto Resource que contiene la lista de juegos o un mensaje de error.
    */
-  fun getGames(): Flow<Resource<List<GameList>>> = flow {
+  fun getGames(filter: String? = null ): Flow<Resource<List<GameList>>> = flow {
     emit(Resource.Loading())
-    when (val result = safeApiCall { gameApi.getGames() }) {
+    when (val result = safeApiCall { gameApi.getGames(filter) }) {
       is Resource.Success -> {
         val gamesList: List<GameList> = result.data?.results ?: emptyList()
         emit(Resource.Success(gamesList))

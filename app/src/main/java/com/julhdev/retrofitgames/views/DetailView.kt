@@ -1,5 +1,6 @@
 package com.julhdev.retrofitgames.views
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,14 +9,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.julhdev.retrofitgames.components.ErrorState
@@ -43,6 +49,12 @@ fun DetailsView(viewmodel: GamesViewModel, navController: NavController, gameId:
     viewmodel.getGameById(gameId)
   }
 
+  DisposableEffect(Unit) {
+    onDispose {
+      viewmodel.cleanState()
+    }
+  }
+
   Scaffold(
     topBar = {
       MainTopBar(
@@ -55,6 +67,7 @@ fun DetailsView(viewmodel: GamesViewModel, navController: NavController, gameId:
     Column(
       modifier = Modifier
         .padding(innerPadding)
+        .background(Color.Black)
     ) {
       when (val res = gameResource) {
         is Resource.Loading -> {
@@ -78,8 +91,15 @@ fun DetailsView(viewmodel: GamesViewModel, navController: NavController, gameId:
 }
 
 
+/**
+ * Composable que muestra el contenido de los detalles del juego.
+ * @param gameDetails Objeto SingleGameModel que contiene los detalles del juego.
+ * @usage DetailsViewContent(gameDetails)
+ */
 @Composable
 fun DetailsViewContent(gameDetails: SingleGameModel) {
+  val scroll = rememberScrollState(0)
+
   MainImage(
     image = gameDetails.backgroundImage,
   )
@@ -101,5 +121,17 @@ fun DetailsViewContent(gameDetails: SingleGameModel) {
       score = gameDetails.metacritic,
     )
   }
+
+  Text(
+    text = gameDetails.description,
+    textAlign = TextAlign.Justify,
+    color = Color.White,
+    modifier = Modifier
+      .padding(start = 15.dp, end = 15.dp, top = 10.dp,  bottom = 10.dp)
+      .fillMaxWidth()
+      .verticalScroll(
+        scroll
+      )
+  )
 }
 

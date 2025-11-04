@@ -35,9 +35,12 @@ class GamesViewModel @Inject constructor(
   private val _state = MutableStateFlow<Resource<SingleGameModel>>(Resource.Loading())
   val state = _state.asStateFlow()
 
-
-  init {
-    fetchGames()
+  /**
+   * Limpia el estado actual del StateFlow de detalles del juego estableciéndolo en Resource.Loading().
+   * @usage Llamar a cleanState() para restablecer el estado antes de una nueva operación de obtención de datos.
+   */
+  fun cleanState() {
+    _state.value = Resource.Loading()
   }
 
   /**
@@ -47,10 +50,10 @@ class GamesViewModel @Inject constructor(
    * @see Resource
    * @usage Llamar a fetchGames() para iniciar la recuperación de datos de juegos.
    */
-  private fun fetchGames() {
+   fun fetchGames(filter: String? = null) {
     viewModelScope.launch(Dispatchers.IO) {
       _games.value = Resource.Loading()
-      repository.getGames().collect { result ->
+      repository.getGames(filter).collect { result ->
         _games.value = result
       }
     }

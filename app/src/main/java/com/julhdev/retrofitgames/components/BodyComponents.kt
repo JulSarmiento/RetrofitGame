@@ -15,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -49,7 +50,8 @@ import com.julhdev.retrofitgames.ui.theme.CustomBlack
 fun MainTopBar(
   title: String,
   showBackBtn: Boolean = false,
-  onBackClick: () -> Unit = { }
+  onBackClick: () -> Unit = { },
+  onActionClick: () -> Unit = { }
 ) {
   TopAppBar(
     title = {
@@ -74,6 +76,19 @@ fun MainTopBar(
           )
         }
       }
+    },
+    actions = {
+      if (!showBackBtn) {
+        IconButton(
+          onClick = { onActionClick() }
+        ) {
+          Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = "Search Button",
+            tint = Color.White
+          )
+        }
+      }
     }
   )
 }
@@ -91,6 +106,10 @@ fun CardGame(
 ) {
   Card(
     shape = RoundedCornerShape(5.dp),
+    colors = CardDefaults.cardColors(
+      containerColor = CustomBlack,
+      contentColor = Color.White
+    ),
     modifier = Modifier
       .padding(10.dp)
       .shadow(40.dp)
@@ -102,7 +121,6 @@ fun CardGame(
       Text(
         text = game.name,
         fontWeight = FontWeight.ExtraBold,
-        color = Color.White,
         modifier = Modifier
           .padding(15.dp)
       )
